@@ -53,7 +53,7 @@ public partial class MainWindow : Window
             AnimationView.CoreWebView2.NavigationCompleted += (_, _) =>
             {
                 if (_closed) return;
-                App.Log("Animation rendered in native overlay over the ChatGPT window.");
+                App.Log($"Animation rendered in native overlay over the {App.ProductName} window.");
                 var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(17000) };
                 timer.Tick += (_, _) => { timer.Stop(); Close(); };
                 timer.Start();
@@ -64,8 +64,8 @@ public partial class MainWindow : Window
         {
             App.Log("OVERLAY ERROR: " + ex);
             MessageBox.Show(
-                $"动画无法播放。请确认系统已安装 Microsoft Edge WebView2 Runtime。\n\n详细日志：{Path.Combine(Path.GetTempPath(), "ChatGPT-550C-launch.log")}",
-                "ChatGPT 550C 启动器", MessageBoxButton.OK, MessageBoxImage.Error);
+                $"动画无法播放。请确认系统已安装 Microsoft Edge WebView2 Runtime。\n\n详细日志：{Path.Combine(Path.GetTempPath(), App.ProductName + "-550C-launch.log")}",
+                $"{App.ProductName} 550C 启动器", MessageBoxButton.OK, MessageBoxImage.Error);
             Close();
         }
     }
@@ -73,7 +73,7 @@ public partial class MainWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _closed = true;
-        App.Log("Native animation overlay closed; ChatGPT remains open.");
+        App.Log($"Native animation overlay closed; {App.ProductName} remains open.");
         try { AnimationView.Dispose(); } catch { }
         try { Directory.Delete(_profile, true); } catch { }
         base.OnClosed(e);

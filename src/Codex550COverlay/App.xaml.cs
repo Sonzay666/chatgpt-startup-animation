@@ -8,7 +8,13 @@ namespace Codex550COverlay;
 public partial class App : Application
 {
     private const string AppUserModelId = "OpenAI.Codex_2p2nqsd0c76g0!App";
+#if CODEX_EDITION
+    internal const string ProductName = "Codex";
+    private static readonly string LogPath = Path.Combine(Path.GetTempPath(), "Codex-550C-launch.log");
+#else
+    internal const string ProductName = "ChatGPT";
     private static readonly string LogPath = Path.Combine(Path.GetTempPath(), "ChatGPT-550C-launch.log");
+#endif
 
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -31,9 +37,9 @@ public partial class App : Application
             Process.Start(new ProcessStartInfo("explorer.exe", $"shell:AppsFolder\\{AppUserModelId}") { UseShellExecute = true });
             Log($"Activated installed Windows app: {AppUserModelId}");
 
-            var appWindow = await WaitForChatGptWindowAsync(TimeSpan.FromSeconds(40));
+            var appWindow = await WaitForDesktopWindowAsync(TimeSpan.FromSeconds(40));
             if (appWindow == IntPtr.Zero)
-                throw new InvalidOperationException("ChatGPT Windows app did not expose a window within 40 seconds.");
+                throw new InvalidOperationException($"{ProductName} Windows app did not expose a window within 40 seconds.");
 
             ShowWindow(appWindow, 9); // SW_RESTORE
             RECT bounds = default;
@@ -50,9 +56,9 @@ public partial class App : Application
                 await Task.Delay(100);
             }
             if (!restored)
-                throw new InvalidOperationException("Could not read the ChatGPT window bounds.");
+                throw new InvalidOperationException($"Could not read the {ProductName} window bounds.");
 
-            Log($"Using ChatGPT window bounds: {bounds.Left},{bounds.Top},{bounds.Right - bounds.Left},{bounds.Bottom - bounds.Top}");
+            Log($"Using {ProductName} window bounds: {bounds.Left},{bounds.Top},{bounds.Right - bounds.Left},{bounds.Bottom - bounds.Top}");
             var window = new MainWindow(bounds);
             MainWindow = window;
             window.Closed += (_, _) => Shutdown();
@@ -62,23 +68,24 @@ public partial class App : Application
         {
             Log("ERROR: " + ex);
             MessageBox.Show(
-                $"无法启动 ChatGPT 桌面版。\n{ex.Message}\n\n详细日志：{LogPath}",
-                "ChatGPT 550C 启动器", MessageBoxButton.OK, MessageBoxImage.Error);
+                $"无法启动 {ProductName} 桌面版。\n{ex.Message}\n\n详细日志：{LogPath}",
+                $"{ProductName} 550C 启动器", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
         }
     }
 
-    private static async Task<IntPtr> WaitForChatGptWindowAsync(TimeSpan timeout)
+    private static async Task<IntPtr> WaitForDesktopWindowAsync(TimeSpan timeout)
     {
         var end = DateTime.UtcNow + timeout;
         while (DateTime.UtcNow < end)
         {
-            foreach (var process in Process.GetProcessesByName("ChatGPT"))
+            foreach (var process in Process.GetProcessesByName("ChatGPT").Concat(Process.GetProcessesByName("Codex")))
             {
                 try
                 {
                     var path = process.MainModule?.FileName;
-                    if (process.MainWindowHandle != IntPtr.Zero && path?.Contains("WindowsApps", StringComparison.OrdinalIgnoreCase) == true)
+                    if (process.MainWindowHandle != IntPtr.Zero &&
+                        path?.Contains("\\WindowsApps\\OpenAI.Codex_", StringComparison.OrdinalIgnoreCase) == true)
                         return process.MainWindowHandle;
                 }
                 catch { }
