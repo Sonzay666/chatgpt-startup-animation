@@ -1,0 +1,38 @@
+name: Build Windows release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish and package
+        shell: pwsh
+        run: |
+          $publish = Join-Path $PWD 'publish'
+          dotnet publish src/Codex550COverlay/Codex550COverlay.csproj -c Release -r win-x64 --self-contained true -o $publish
+          if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
+          Copy-Item packaging/* $publish/ -Force
+          $zip = Join-Path $PWD 'ChatGPT-550C-启动器-win-x64.zip'
+          Compress-Archive -Path (Join-Path $publish '*') -DestinationPath $zip -CompressionLevel Optimal
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $(Split-Path $zip -Leaf)" | Set-Content (Join-Path $PWD 'SHA256SUMS.txt') -Encoding ascii
+
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME 'ChatGPT-550C-启动器-win-x64.zip' 'SHA256SUMS.txt' --title "ChatGPT 开场动画 $env:GITHUB_REF_NAME" --generate-notes

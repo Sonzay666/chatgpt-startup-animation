@@ -1,0 +1,11 @@
+ChatGPT 550C 开场动画启动器
+
+1. 完整解压这个 ZIP。
+2. 双击“启动 ChatGPT 550C.cmd”。
+3. 按 Esc 可提前跳过动画。
+
+需要 Windows 10/11 x64、ChatGPT Windows 桌面应用和 Microsoft Edge WebView2 Runtime。
+.NET 运行时已包含在包内。若缺少 WebView2 Runtime，请从微软官方下载页安装：
+https://developer.microsoft.com/microsoft-edge/webview2/
+
+这是非官方启动器，不会修改 ChatGPT 安装文件，也不会启动 ChatGPT 网页。

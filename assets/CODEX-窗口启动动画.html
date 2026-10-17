@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030202"><title>CODEX // 550C 启动协议 · 视频复刻 V2</title>
+<style>
+:root{--amber:#a77d3e;--amber-hi:#d7ab60;--muted:#5e4c35;--red:#d24536;--scarlet:#ee3a38;--dimred:#64241e;--edge:#503822;--ink:#020202}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#010101;color:#d4a659;overflow:hidden;font-family:Consolas,"SFMono-Regular","Noto Sans Mono","Liberation Mono",monospace}button{font:inherit}#frameWrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}#stage{position:relative;width:922px;height:576px;flex:none;overflow:hidden;transform-origin:center center;background:#000}
+#shell{position:absolute;left:141px;top:0;width:781px;height:526px;background:#000;border:1px solid #202022;border-radius:8px 8px 3px 3px;box-shadow:0 2px 10px #0009;overflow:hidden;opacity:0;transform:translateY(4px)}
+#chrome{position:absolute;inset:0 0 auto;height:24px;background:#050302;z-index:50;display:flex;align-items:flex-start;padding-top:11px;padding-left:11px;gap:5px;pointer-events:none}
+.macdot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 1px #fff7}.macdot:nth-child(1){background:#ff605c}.macdot:nth-child(2){background:#ffbd44}.macdot:nth-child(3){background:#00c74f}
+#bareBlack{position:absolute;inset:24px 0 0;background:#000;z-index:1}
+#identity{position:absolute;left:205px;top:195px;width:380px;height:145px;z-index:5;opacity:0;pointer-events:none;filter:drop-shadow(0 0 1px #fff1)}
+#identity svg{width:100%;height:100%;overflow:visible}.glyph{fill:none;stroke:#fafafa;stroke-width:10;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}.glyph.red{stroke:#f4242d;stroke-width:11}
+#blackout{position:absolute;inset:24px 0 0;background:#000;z-index:9;pointer-events:none;opacity:0}
+#system{position:absolute;inset:23px 3px 15px 3px;z-index:7;opacity:0;background:#020101;overflow:hidden;color:#94703c}
+#system:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,#180c052a 4px);z-index:34;pointer-events:none}
+#sys-header{position:absolute;left:0;right:0;top:0;height:5px;border-top:1px solid #564024;background:linear-gradient(90deg,#6f512b,#1a0c07,#765126);opacity:.9}
+#sys-toplabel{position:absolute;left:54px;right:5px;top:5px;height:17px;font-size:7px;letter-spacing:1.1px;z-index:51;opacity:0;color:#966a3d;white-space:nowrap}
+#sys-toplabel i{font-style:normal;letter-spacing:1.5px;margin:0 14px;color:#6c5335}
+.sys-pane{filter:brightness(.78);position:absolute;border:1px solid #604321;background:#040202;overflow:hidden;box-shadow:inset 0 0 0 1px #170b04}
+.sys-title{height:18px;line-height:17px;padding:0 8px;border-bottom:1px solid #4a3020;font-size:7px;color:#a17640;letter-spacing:1.5px;background:linear-gradient(180deg,#0d0805,#040201)}
+.sys-title:before{content:"◈";margin-right:8px;font-size:7px;color:#574b2e}
+#telemetry{left:2px;top:2px;width:211px;height:475px}#terminal{left:215px;top:2px;width:357px;height:475px}#firmware{left:574px;top:2px;width:198px;height:243px}#nodes{left:574px;top:247px;width:198px;height:230px}
+.data-rows{padding:9px 8px;font-size:7.3px;line-height:1.37}.dat-row{display:flex;justify-content:space-between;gap:9px;border-bottom:1px solid #2d190e;min-height:15px;align-items:center}.dat-row .k{color:#554431;letter-spacing:1.0px}.dat-row .v{color:#aa8b60;max-width:57%;text-align:right}.dat-row .v.emph{color:#c6a66d}.dat-row .v.alert{color:#c35041}.dat-label{border-top:1px solid #4a311d;color:#8c6638;padding:3px 1px;letter-spacing:1.7px;margin-top:6px}
+#term-lines{padding:7px 7px;color:#b28b4d;font-size:7.25px;line-height:1.43;letter-spacing:.05px;white-space:nowrap;overflow:hidden;height:432px}#term-lines .prefix{color:#7f542c}#term-lines .yellow{color:#dec06e}#term-lines .warn{color:#c95044}#term-lines .ok{color:#748850}
+#cursor{position:absolute;left:8px;bottom:15px;width:3px;height:8px;background:#e4b14c;animation:blink .5s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.fw-code{padding:6px;font-size:7px;line-height:1.35;color:#957143;white-space:pre;overflow:hidden}.fw-code em{font-style:normal;color:#c9a968}
+#node-grid{padding:8px 8px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);column-gap:5px;row-gap:6px;height:190px}
+.node{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cf5335;opacity:.74}.node svg{width:20px;height:22px;overflow:visible}.node small{font-size:5px;color:#6c452a;white-space:nowrap;letter-spacing:.4px}.node.ready{color:#a5b549}.node.ready small{color:#89944c}
+#sys-foot{position:absolute;bottom:-15px;left:4px;right:3px;height:14px;display:flex;align-items:center;gap:15px;border-top:1px solid #61451d;font-size:6px;letter-spacing:1.1px;padding:0 6px;color:#6b5030;z-index:40;background:#030202}#sys-foot .progress-track{height:3px;width:150px;border:1px solid #5d3916;background:#150b03}#sys-foot .progress-track i{display:block;width:0;height:100%;background:#b0832e;box-shadow:0 0 3px #d89929}#sys-foot span:last-child{margin-left:auto}
+#pop-layer{position:absolute;inset:0;z-index:20;pointer-events:none}
+.popwin{filter:brightness(.88);position:absolute;border:1px solid #7b4326;background:#080402f5;box-shadow:0 0 0 1px #180a07,0 9px 28px #000d,inset 0 0 35px #250b0618;opacity:0;transform:translateY(7px) scale(.988);overflow:hidden;color:#b38e59}
+.popwin.red{border-color:#91382f;box-shadow:0 0 0 1px #1f0808,0 10px 25px #000c,0 0 16px #8c190b1d}
+.popwin .pbar{height:23px;display:flex;align-items:center;border-bottom:1px solid #6c361f;padding:0 10px;background:linear-gradient(180deg,#1c0c08,#080301);font-size:8px;color:#cd9a54;letter-spacing:1.2px;white-space:nowrap}
+.popwin.red .pbar{border-bottom:2px dashed #ba3b30;color:#e46a56;background:#240b08}
+.pbar .win-controls{margin-left:auto;color:#784629;letter-spacing:5px}
+.popup-body{padding:10px 12px;font-size:8px;line-height:1.85;color:#b99b6c}.popup-body .prominent{font-size:23px;color:#e15d4b;letter-spacing:2px}.popup-body .prominent span{font-size:8px;color:#b49762;letter-spacing:1px}.popup-body .st{display:flex;justify-content:space-between;border-bottom:1px solid #422519;min-height:19px;gap:20px}.popup-body .st label{color:#604b35}.popup-body .st strong{color:#d9ac66;font-weight:400}.popup-body .st strong.r{color:#d65343}.popup-body .msg{border-left:2px solid #bb583d;background:#3b1c092e;padding:8px;margin:12px 0;color:#c6a16b;font-size:8px;line-height:1.65}.popup-body .buttons{display:flex;justify-content:flex-end;gap:7px;margin-top:7px}.popup-body .buttons span{border:1px solid #8d572d;padding:2px 10px;color:#cf9e4c;font-size:8px}.popup-body .buttons span.active{border-color:#dc9c41;background:#3d2510}.popup-body .console{background:#080303;border:1px solid #5e3023;color:#c36b53;padding:5px 8px;font-size:7.1px;line-height:1.55;margin-top:8px;white-space:pre}.popup-body .separator{height:1px;background:#593119;margin:10px 0}
+#access{left:317px;top:7px;width:411px;height:241px}#pollution{left:13px;top:112px;width:409px;height:320px}#inject{left:319px;top:266px;width:374px;height:185px}#anomaly{left:268px;top:136px;width:398px;height:250px}#emergency{left:163px;top:147px;width:411px;height:275px}
+#bigBanner{position:absolute;z-index:35;left:26px;right:26px;top:180px;height:112px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#020101ec,#130b07f7 50%,#020101ec);border-top:1px solid #70431d;border-bottom:1px solid #69401d;color:#eeb95e;text-shadow:0 0 6px #dd8029,0 0 16px #c8751599;letter-spacing:7px;font-family:"Arial Narrow",Consolas,monospace;font-size:34px;font-weight:400;white-space:nowrap;opacity:0;transform:scaleX(1.06);pointer-events:none}
+#bigBanner:before,#bigBanner:after{content:"";position:absolute;left:0;right:0;top:-32px;height:1px;background:linear-gradient(90deg,transparent,#5a3418,transparent)}#bigBanner:after{top:auto;bottom:-30px}
+#result{position:absolute;inset:24px 0 0;z-index:60;background:#0b0b0e;opacity:0;color:#e8e8ea;font-family:Inter,"Segoe UI",Arial,sans-serif;pointer-events:none}
+#result .sidebar{width:177px;height:100%;border-right:1px solid #28282b;background:#151518;padding:15px 11px;font-size:10px;color:#929297}
+#result .brand{font-size:16px;color:#fafafa;letter-spacing:-.8px;font-weight:600;margin-bottom:22px;padding:2px 8px}#result .brand b{color:#ef5d4e;font-weight:600}
+#result .sb-item{padding:9px;border-radius:6px;display:flex;gap:10px;align-items:center}#result .sb-item.sel{background:#303036;color:white}#result .sb-div{font-size:8px;margin:19px 8px 7px;color:#797980}
+#result .body{position:absolute;top:0;bottom:0;left:177px;right:0;display:flex;flex-direction:column;justify-content:center;align-items:center}
+#result .eyebrow{font:10px Consolas,monospace;letter-spacing:2px;color:#85858e;margin-bottom:16px}#result .welcome{font-size:30px;font-weight:350;letter-spacing:-1.1px;margin:0 0 34px}#result .composer{width:420px;height:84px;border:1px solid #424248;border-radius:12px;background:#222226;padding:15px;font-size:12px;color:#8c8c91;box-shadow:0 1px 0 #ffffff0a inset}#result .tools{display:flex;justify-content:space-between;align-items:center;margin-top:19px;font-size:9px;color:#a5a5ad}#result .send{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#d4d5db;color:#1f2023}#result .footerline{position:absolute;bottom:19px;color:#77777b;font-size:9px}
+#stage.immersive #identity{left:271px}#stage.immersive #system{transform:scaleX(1.174);transform-origin:left top}#grain{position:absolute;z-index:90;inset:0;pointer-events:none;opacity:.12;background:repeating-linear-gradient(0deg,#0000 0px,#0000 3px,#0008 4px);mix-blend-mode:multiply}#pulse{position:absolute;inset:0;z-index:91;pointer-events:none;background:#e6b065;opacity:0}
+#hud{display:none!important;position:fixed;right:16px;bottom:13px;z-index:300;display:flex;align-items:center;gap:7px;color:#ccc;font-size:11px;filter:drop-shadow(0 2px 4px black)}#hud button{display:none!important;color:#d4b38d;background:#0b0909e8;border:1px solid #61482d;border-radius:4px;padding:8px 10px;cursor:pointer;white-space:nowrap}#hud button:hover{border-color:#d09e60;color:#f6cb84}#timeDisplay{background:#0c0909e5;border:1px solid #4e3925;border-radius:4px;padding:8px 9px;min-width:59px;text-align:center}#hud .muted{color:#a4a09c}
+@media (max-width:580px){#hud{display:none!important;left:5px;right:5px;justify-content:center;gap:3px;bottom:5px;font-size:9px}#hud button{display:none!important;padding:9px 6px;font-size:9px}#timeDisplay{min-width:auto;padding:9px 5px}}
+/* Standalone Codex-window cut: desktop chrome/background removed. */
+#frameWrap{background:#000!important}
+#desktop,#result{display:none!important}
+#stage{background:#000!important}
+#shell{left:0!important;top:0!important;width:922px!important;height:576px!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+#chrome .macdot{display:none!important}
+#chrome{padding-left:16px!important;background:#050505!important}
+#changeView{display:none!important}#identity .glyph{font-family:Arial,Helvetica,sans-serif;font-size:112px;font-weight:600;letter-spacing:0;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;fill:#fafafa}#identity .glyph.red,#identity .glyph tspan.red{fill:#f4242d;stroke:#f4242d}</style>
+</head><body>
+<div id="frameWrap"><div id="stage" class="immersive"><div id="shell"><div id="bareBlack"></div><div id="identity"><svg viewBox="0 0 480 150" aria-label="CODEX 流动描边标识">
+<text class="glyph" x="240" y="115" text-anchor="middle">C</text><text class="glyph red" x="240" y="115" text-anchor="middle">O</text><text class="glyph" x="240" y="115" text-anchor="middle">D</text><text class="glyph" x="240" y="115" text-anchor="middle">E</text><text class="glyph" x="240" y="115" text-anchor="middle">X</text>
+</svg></div>
+<div id="chrome"><i class="macdot"></i><i class="macdot"></i><i class="macdot"></i><div id="sys-toplabel">550C // UAV-BS-07 <i>MODE OVERRIDE</i> JURISDICTION CN-BJ-07 <i>SESSION 0X5A03E24F</i> TIME 13:09:09</div></div><div id="blackout"></div>
+<div id="system"><div id="sys-header"></div>
+<div id="telemetry" class="sys-pane"><div class="sys-title">TELEMETRY / C-BAND</div><div class="data-rows" id="telemetryRows"></div></div>
+<div id="terminal" class="sys-pane"><div class="sys-title">CODEX CORE TERMINAL</div><div id="term-lines"></div><div id="cursor"></div></div>
+<div id="firmware" class="sys-pane"><div class="sys-title">FIRMWARE INJECTION</div><div class="fw-code" id="fw-code"></div></div>
+<div id="nodes" class="sys-pane"><div class="sys-title">SWARM NODE MATRIX</div><div id="node-grid"></div></div>
+<div id="pop-layer">
+<div id="access" class="popwin"><div class="pbar">✧ ACCESS AUTHORIZATION <span class="win-controls">− □ ×</span></div><div class="popup-body"><div class="st"><label>TECHNICIAN</label><strong>TECHNICIAN-01</strong></div><div class="st"><label>LEVEL</label><strong>LEVEL-5 / ROOT</strong></div><div class="st"><label>DEVICE</label><strong>UAV-BS-07</strong></div><div class="st"><label>MODE</label><strong>OVERRIDE · FORCE</strong></div><div class="st"><label>KEY</label><strong>0x853FB8</strong></div><div class="msg">授权将赋予 CODEX 对无人机集群的完全控制权限。</div><div class="buttons"><span>DENY</span><span class="active">GRANT</span></div></div></div>
+<div id="pollution" class="popwin red"><div class="pbar">! SIGNAL POLLUTION <span class="win-controls">− □ ×</span></div><div class="popup-body"><div class="st"><label>FLIGHT TERMINATION</label><strong class="r">185 · INJECTED</strong></div><div class="st"><label>NAV_LAND</label><strong class="r">TAMPERED</strong></div><div class="st"><label>ROOT CA</label><strong class="r">EXTERNAL OVERRIDE</strong></div><div class="st"><label>CLUSTER LOCK</label><strong class="r">PRESET</strong></div><div class="separator"></div><div style="color:#8e5f4f;font-size:7px;letter-spacing:1px">INTERCEPT LOG</div><div class="console">[13:09:09] RX → 0xDEAD cmd=185 param=1
+[13:09:09] RX → 0xDEAD NAV_LAND coord=(31,23,121,47)
+[13:09:10] RX → 0xDEAD ROOT_CA inject
+[13:09:10] RX → 0xDEAD CLUSTER_LOCK preset
+[13:09:11] ERR — unauthorized ca detected</div><div class="msg">基站流量已被注入，建议立即启动回滚程序。</div><div class="buttons"><span class="active" style="border-color:#a94c3a;color:#d95b48">ACKNOWLEDGE</span></div></div></div>
+<div id="inject" class="popwin red"><div class="pbar">◆ AUTH BYPASS INJECTION <span class="win-controls">− □ ×</span></div><div class="popup-body"><div class="st"><label>AKA</label><strong>EXTERNAL ALIAS</strong></div><div class="st"><label>BYPASS</label><strong class="r">ENABLED</strong></div><div class="st"><label>ROOT CA</label><strong class="r">REJECTED</strong></div><div class="st"><label>PERMISSION</label><strong>ROOT / FORCE</strong></div><div class="msg">同步检验完成。控制权切换中。</div><div class="buttons"><span>ROLLBACK</span><span class="active">INJECT</span></div></div></div>
+<div id="anomaly" class="popwin red"><div class="pbar">! ANOMALY // SECTOR-47 <span class="win-controls">− □ ×</span></div><div class="popup-body"><div class="st"><label>STATUS</label><strong class="r">MOTION UNDEFINED</strong></div><div class="st"><label>RECOVERY</label><strong>GLOBAL SYNC</strong></div><div class="st"><label>OVERRIDE</label><strong class="r">MANUAL / REJECTED</strong></div><div class="console">[13:09:11] illegal handshake detected
+[13:09:12] signature mismatch / slot_B
+[13:09:12] injecting new root certificate
+[13:09:13] status: REWRITE QUEUED</div><div class="msg">异常监测：飞控权限已被重定向。</div><div class="buttons"><span>ABORT</span><span class="active">CONTINUE</span></div></div></div>
+<div id="emergency" class="popwin red"><div class="pbar">▣ EMERGENCY DISARM <span class="win-controls">− □ ×</span></div><div class="popup-body"><div class="prominent">47 <span>MOTORS WILL BE DISARMED</span></div><div class="separator"></div><div class="st"><label>COMMAND</label><strong>MAV_CMD_ARM_DISARM (400)</strong></div><div class="st"><label>PARAM1</label><strong class="r">0 · DISARM</strong></div><div class="st"><label>PARAM2</label><strong>0 · NORMAL</strong></div><div class="st"><label>TARGET</label><strong>ALL NODES · 47</strong></div><div class="msg">紧急关停将切断所有无人机电机动力。此操作不可逆。</div><div class="buttons"><span>ABORT</span><span class="active">CONFIRM</span></div><div style="font-size:7px;color:#785139;margin-top:8px;letter-spacing:1px">CONFIRMATION REQUIRED 　　　　　　　　　13:09:14</div></div></div>
+</div></div><div id="bigBanner">SYSTEM IS REWRITTEN</div><div id="sys-foot"><span>STATE <b id="sysState">INIT</b></span><span>NODE <b id="nodeState">00 / 47</b></span><span>OVERRIDE</span><div class="progress-track"><i id="sysProgress"></i></div><span id="sysProgressVal">0%</span><span>NET OFFLINE　CN 07</span></div></div>
+<div id="result"><div class="sidebar"><div class="brand">CO<b>D</b>EX<span style="font-size:7px;color:#888;margin-left:6px;letter-spacing:.3px">DEMO</span></div><div class="sb-item sel">＋　新建对话</div><div class="sb-item">⌕　搜索</div><div class="sb-div">工作区</div><div class="sb-item">⌗　本地项目</div><div class="sb-item">▧　最近任务</div><div class="sb-div">最近</div><div class="sb-item">▤　550C 启动协议</div></div><div class="body"><div class="eyebrow">INTELLIGENCE SYSTEM // ONLINE</div><h1 class="welcome">准备好构建了吗？</h1><div class="composer">向 CODEX 发送一条消息…<div class="tools"><span>＋　添加文件　　⌘　工作区</span><span class="send">↑</span></div></div><div class="footerline">启动动画演示界面 · 不是真实 Codex 客户端</div></div></div>
+<div id="grain"></div><div id="pulse"></div></div></div></div>
+<audio id="soundtrack" preload="none"></audio><div id="hud"><span id="timeDisplay">00:00</span><button id="replay" title="快捷键 R">↻ 重播</button><button id="playPause" title="快捷键 空格">Ⅱ 暂停</button><button id="audioBtn" title="使用你上传的视频原声音轨">♫ 音效关</button><button id="changeView">沉浸模式</button><button id="fullscreen" title="快捷键 F">全屏</button><button id="skip" title="快捷键 Esc">跳过</button></div>
+<script>
+(()=>{
+'use strict';
+const $=q=>document.querySelector(q), clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), smooth=(a,b,x)=>{let v=clamp((x-a)/(b-a));return v*v*(3-2*v)}, fade=(a,b,c,d,t)=>smooth(a,b,t)*(1-smooth(c,d,t));
+$('#system').appendChild($('#bigBanner'));$('#system').appendChild($('#sys-foot'));$('#shell').appendChild($('#result')); const stage=$('#stage'),shell=$('#shell'),svg=$('#identity svg'),paths=[...svg.querySelectorAll('.glyph')],chunks=['CODEX 550C 核心系统初始化完成。','正在验证认证链以及多机控制权限。','探测到来自 CN-BJ-07 的未授权数据包。','重建远端同步索引，恢复节点序列。','载入备用核心映像，将启用 SLOT_B。','检测到 47 个活跃节点。','正在恢复控制链路与实时遥测流。','验证区块签名一致性。','解锁控制权限，申请 ROOT CA。','所有控制命令已缓存至同步队列。','[WARN] 检测到干扰，激活冗余网络。','正在同步 CODEX 启动协议。','已授权 12 / 47 节点。','已授权 23 / 47 节点。','已授权 36 / 47 节点。','所有节点签名验证成功。','HASH 3f9a_c210 ✓','HASH 88be_41d7 ✓','HASH 8c72_9af3 ✓','HASH e5d1_77b0 ✓','所有飞机已 disarm。','训练系统恢复待命。','CODEX 引擎已接管系统控制权。','准备进入推理环境。','CONFIG_OVERRIDE=TRUE','SESSION COMPLETE — READY.'];
+const hashes=['0x2A87','0xFF03','0x53AE','0xC4D1'];let data=[];
+const tele=[['RADIO','100 MHz · SCS 30 kHz'],['BW','4×4 DL / 2×2 UL'],['PCI','287'],['EARFCN','4172'],['CELL','0x53AF'],['PROTOCOL',''],['RRC','CONNECTED'],['CIPHER','AES-256-GCM'],['INTEGRITY','NIA2 · CMAC'],['KEY ROT','216 ms'],['METRICS',''],['RSRP','−86 dBm'],['SINR','25.8 dB'],['BLER','0.70 %'],['HANDOVER','16 proc'],['STATUS',''],['UPLINK','SEVERED'],['ROOT CA','REPLACING'],['NODES','47 / 47']];
+$('#telemetryRows').innerHTML=tele.map(([k,v],i)=>!v?`<div class="dat-label">${k}</div>`:`<div class="dat-row"><span class="k">${k}</span><span class="v ${/CONNECTED|47|NIA2/.test(v)?'emph':/SEVERED|REPLACING/.test(v)?'alert':''}">${v}</span></div>`).join('');
+$('#fw-code').innerHTML=Array.from({length:24},(_,i)=>`${('0'+(315+i)).slice(-4)} ${Math.floor(385120+i*243).toString(16).padStart(8,'0')}  ${i%5===0?'<em>void security_init(void){</em>':i%5===1?'   root_ca_550c();':i%5===2?'   await cluster_sync();':i%5===3?'   return AUTH_ROOT;':' }'}`).join('\n');
+const nodeSvg='<svg viewBox="0 0 23 23"><g stroke="currentColor" stroke-width="1.05" fill="none"><path d="M11.5 4V19M4 11.5H19"/><circle cx="11.5" cy="3.6" r="3.3"/><circle cx="19.4" cy="11.5" r="3.3"/><circle cx="11.5" cy="19.4" r="3.3"/><circle cx="3.6" cy="11.5" r="3.3"/><circle cx="11.5" cy="11.5" r="1.7"/></g></svg>';
+const nodes=$('#node-grid');nodes.innerHTML=Array.from({length:24},(_,i)=>`<div class="node" data-n="${i}">${nodeSvg}<small>U${String(i+1).padStart(2,'0')}</small></div>`).join('');
+paths.forEach(p=>{const length=p.getTotalLength?.()??p.getComputedTextLength()*3.4;p.dataset.l=length;p.style.strokeDasharray=length;p.style.strokeDashoffset=length});
+let running=true, immersive=true, now=0, last=0, duration=16.2, manual=false, logsCache=-1,audioOn=false;const soundtrack=$('#soundtrack');soundtrack.volume=.7;
+function fit(){const scale=Math.min(window.innerWidth/922,window.innerHeight/576);stage.style.transform=`scale(${scale})`;const textNodes=[...svg.querySelectorAll(".glyph")];const gap=7;let widths=textNodes.map(n=>n.getComputedTextLength());let total=widths.reduce((a,b)=>a+b,0)+gap*(widths.length-1);let x=(480-total)/2;textNodes.forEach((n,i)=>{n.setAttribute("x",x);n.setAttribute("text-anchor","start");n.style.letterSpacing="0px";x+=widths[i]+gap})}
+window.addEventListener('resize',fit);fit();
+function changeView(){immersive=!immersive;stage.classList.toggle('immersive',immersive);$('#desktop').style.display=immersive?'none':'';shell.style.left=immersive?'0px':'141px';shell.style.width=immersive?'922px':'781px';shell.style.height=immersive?'576px':'526px';$('#changeView').textContent=immersive?'参考画面':'沉浸模式';}
+function renderLog(t){const num=clamp(Math.round((t-7.92)*5.8),1,29);if(num===logsCache)return;logsCache=num;let html='';for(let i=0;i<num;i++){const time=`13:09:${String(8+Math.floor(i/4)).padStart(2,'0')}`;const warn=i===4||i===16;const main=chunks[i%chunks.length];const cls=warn?'warn':i>20?'ok':i%6===1?'yellow':'';html+=`<div><span class="prefix">${time}</span> &nbsp; <span class="${cls}">[${i%4===0?'WARN':'550C'}] ${main}</span></div>`;}$('#term-lines').innerHTML=html}
+const configs=[['#access',8.12,8.37,9.25,9.48],['#pollution',8.65,8.86,11.64,11.88],['#inject',9.34,9.51,12.3,12.52],['#anomaly',10.13,10.34,11.22,11.45],['#emergency',12.52,12.73,13.93,14.10]];
+function render(t){now=t;
+ const sh=smooth(.10,.36,t);shell.style.opacity=sh; shell.style.transform=`translateY(${(1-sh)*4}px)`;
+ $('#identity').style.opacity=fade(.38,.68,6.88,7.28,t);$('#sys-toplabel').style.opacity=String(fade(7.75,7.98,15.75,16.0,t));
+ paths.forEach((p,i)=>{const l=+p.dataset.l;const start=.72+i*.11;let v=smooth(start,start+.76,t);p.style.strokeDashoffset=(l*(1-v)).toFixed(2);p.style.opacity=String(clamp(v*1.75));p.style.fillOpacity=String(.95*smooth(start+.48,start+1.12,t));});
+ $('#blackout').style.opacity=fade(7.1,7.27,7.67,7.94,t);
+ const sys=fade(7.75,7.98,15.75,16.0,t);$('#system').style.opacity=sys;
+ renderLog(t);
+ configs.forEach(([id,a,b,c,d])=>{let v=fade(a,b,c,d,t);const p=$(id);p.style.opacity=String(v);p.style.transform=`translateY(${(1-v)*9}px) scale(${(.985+v*.015).toFixed(3)})`;});
+ for(const nd of nodes.children){const i=+nd.dataset.n;nd.classList.toggle('ready',t>13.95+i*.018)}
+ const progress=clamp((t-8)/6.9);$('#sysProgress').style.width=(progress*100).toFixed(0)+'%';$('#sysProgressVal').textContent=Math.round(progress*100)+'%';$('#nodeState').textContent=Math.round(progress*47)+' / 47';$('#sysState').textContent=t<12?'OVERRIDE':t<14.1?'DISARM':'COMPLETE';
+ const banner=fade(14.21,14.5,15.85,16.1,t);$('#bigBanner').style.opacity=String(banner);$('#bigBanner').style.transform=`scaleX(${(1.04-.04*banner).toFixed(3)})`;
+ $('#result').style.opacity=String(smooth(15.36,15.58,t));
+ const glitch=(t>8&&t<14.5&&Math.sin(t*64)>0.95)?0.016:0;$('#pulse').style.opacity=String(glitch);
+ $('#timeDisplay').textContent=`${String(Math.floor(t)).padStart(2,'0')}:${String(Math.floor(t*100)%100).padStart(2,'0')}`;
+ }
+function tick(timestamp){if(!last)last=timestamp;const dt=Math.min((timestamp-last)/1000,.09);last=timestamp;if(running){now=Math.min(duration,now+dt);render(now);if(now>=duration){running=false;soundtrack.pause();$('#playPause').textContent='▶ 播放'}}requestAnimationFrame(tick)}
+function replay(){now=0;last=0;logsCache=-1;running=true;$('#playPause').textContent='Ⅱ 暂停';render(0);if(audioOn){soundtrack.currentTime=0;soundtrack.play().catch(()=>{})}}
+function toggle(){if(now>=duration&&!running){replay();return}running=!running;$('#playPause').textContent=running?'Ⅱ 暂停':'▶ 播放';if(audioOn){if(running){soundtrack.currentTime=now;soundtrack.play().catch(()=>{})}else soundtrack.pause()}}
+$('#replay').onclick=replay;$('#playPause').onclick=toggle;$('#audioBtn').onclick=()=>{audioOn=!audioOn;$('#audioBtn').textContent=audioOn?'♫ 音效开':'♫ 音效关';if(audioOn){soundtrack.currentTime=now;if(running)soundtrack.play().catch(()=>{})}else soundtrack.pause()};$('#changeView').onclick=changeView;$('#skip').onclick=()=>{running=false;soundtrack.pause();render(16.0);$('#playPause').textContent='▶ 播放'};$('#fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.().catch(()=>{})};
+window.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();toggle()}else if(e.key.toLowerCase()==='r')replay();else if(e.key.toLowerCase()==='f')$('#fullscreen').click();else if(e.key==='Escape'&&!document.fullscreenElement)$('#skip').click()});
+const prefersReduce=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;if(prefersReduce){running=false;render(15)}else{render(0);requestAnimationFrame(tick)}
+window.__setTime=(t)=>{running=false;render(clamp(t,0,duration));}; window.__render=render;window.__replay=replay;
+})();
+</script></body></html>
+
+
+
+
+
