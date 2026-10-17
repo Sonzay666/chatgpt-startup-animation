@@ -25,7 +25,7 @@ jobs:
           dotnet publish src/Codex550COverlay/Codex550COverlay.csproj -c Release -r win-x64 --self-contained true -o $publish
           if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
           Copy-Item packaging/* $publish/ -Force
-          $zip = Join-Path $PWD 'ChatGPT-550C-启动器-win-x64.zip'
+          $zip = Join-Path $PWD 'ChatGPT-550C-Launcher-win-x64.zip'
           Compress-Archive -Path (Join-Path $publish '*') -DestinationPath $zip -CompressionLevel Optimal
           $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $(Split-Path $zip -Leaf)" | Set-Content (Join-Path $PWD 'SHA256SUMS.txt') -Encoding ascii
@@ -35,4 +35,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create $env:GITHUB_REF_NAME 'ChatGPT-550C-启动器-win-x64.zip' 'SHA256SUMS.txt' --title "ChatGPT 开场动画 $env:GITHUB_REF_NAME" --generate-notes
+          gh release create $env:GITHUB_REF_NAME 'ChatGPT-550C-Launcher-win-x64.zip' 'SHA256SUMS.txt' --title "ChatGPT 开场动画 $env:GITHUB_REF_NAME" --generate-notes

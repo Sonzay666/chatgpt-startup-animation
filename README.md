@@ -32,7 +32,7 @@ AI 助手需要能访问网络和本机文件，并能运行 PowerShell。也可
 ```powershell
 dotnet publish src/Codex550COverlay/Codex550COverlay.csproj -c Release -r win-x64 --self-contained true -o publish
 Copy-Item packaging/* publish/
-Compress-Archive -Path publish/* -DestinationPath ChatGPT-550C-启动器-win-x64.zip
+Compress-Archive -Path publish/* -DestinationPath ChatGPT-550C-Launcher-win-x64.zip
 ```
 
 推送 `v*` 格式的 Git tag 会触发 GitHub Actions 构建并发布 Windows x64 Release，包含 ZIP 和校验文件。

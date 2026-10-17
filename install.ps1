@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 
 $repo = 'Sonzay666/chatgpt-startup-animation'
-$assetName = 'ChatGPT-550C-启动器-win-x64.zip'
+$assetName = 'ChatGPT-550C-Launcher-win-x64.zip'
 $checksumName = 'SHA256SUMS.txt'
 $headers = @{
     Accept = 'application/vnd.github+json'
